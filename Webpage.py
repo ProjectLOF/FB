@@ -4,6 +4,7 @@ from PIL import Image
 st.title("MVP Webpage")
 
 st.header("Thank you for visiting us and sharing your :blue[Feedback]!!! :sunglasses:")
+from streamlit_star_rating import st_star_rating
 
 
 
@@ -44,3 +45,15 @@ with st.container():
    st.write("*Option 5*")
 
    st.multiselect("What dish would you recommend to your friends?", ["None","Mutton Biryani", "Chicken Vindalo", "Fried Rice"])
+
+
+with st.container():
+   st.write("*Option 6*")
+   stars = st_star_rating("Please rate you experience", maxValue=5, defaultValue=3, key="rating")
+
+
+
+with st.container():
+   st.write("*Option 7*")
+   st_star_rating(label = "Please rate you experience", maxValue = 5, defaultValue = 3, key = "rating", emoticons = True )
+
