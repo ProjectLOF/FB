@@ -55,5 +55,5 @@ with st.container():
 
 with st.container():
    st.write("*Option 7*")
-   st_star_rating(label = "Please rate you experience", maxValue = 5, defaultValue = 3, key = "rating", emoticons = True )
+   emoji = st_star_rating(label = "Please rate you experience", maxValue = 5, defaultValue = 3, key = "emoji rating", emoticons = True )
 
