@@ -38,3 +38,9 @@ with st.container():
    col2.button("Mutton Biryani", use_container_width = True)
    col3.button("Chicken Vindalo", use_container_width = True)
    col4.button("Fried Rice", use_container_width = True)
+
+
+with st.container():
+   st.write("*Option 5*")
+
+   st.multiselect("What dish would you recommend to your friends?", ["None","Mutton Biryani", "Chicken Vindalo", "Fried Rice"])
