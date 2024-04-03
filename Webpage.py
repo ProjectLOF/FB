@@ -5,6 +5,7 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import pandas as pd
 import plotly.express as px 
+from datetime import datetime
 
 
 
@@ -15,7 +16,7 @@ tab_poc_voting, tab_poc_viz = st.tabs(["POC Voting", "POC Viz"])
 
 
 
-def update_db(dish_recommendation,stars):
+def update_db(dish_recommendation,customer_service, ambience_service, user_comment, order):
 
       uri = "mongodb+srv://{}:{}@projectlofcluster.kxjkvqf.mongodb.net/?retryWrites=true&w=majority&appName=ProjectLOFCluster".format(st.secrets["db_username"],st.secrets["db_password"] )
       # Create a new client and connect to the server
@@ -23,10 +24,11 @@ def update_db(dish_recommendation,stars):
       # Send a ping to confirm a successful connection
       try:
          client.admin.command('ping')
-         st.write("Pinged your deployment. You successfully connected to MongoDB!")
+         #st.write("Pinged your deployment. You successfully connected to MongoDB!")
          db = client["feedback_v0"]
-         collection = db["poc_stage"]
-         document = {"table_number": "12", "best_dish": dish_recommendation , "overall_rating":stars}
+         collection = db["poc_v1"]
+         document = {"table_number": "12", "datetime":str(datetime.now()),"recommendation": dish_recommendation, "cs_rating":customer_service, 
+         "ambience_service": ambience_service, "user_comments": user_comment, "order": order}
          inserted_document = collection.insert_one(document)
          client.close()
       except Exception as e:
@@ -54,12 +56,23 @@ with tab_poc_voting :
 
    st.header("Thank you for visiting us and sharing your :blue[Feedback]!!! :sunglasses:")
 
+   order = ["None","Mutton Biryani", "Chicken Vindalo", "Fried Rice"]
+
    with st.form("Feedback", clear_on_submit=True):
-      dish_recommendation = st.selectbox("Recommend a friend", ["None","Mutton Biryani", "Chicken Vindalo", "Fried Rice"])
-      stars = st_star_rating("Please rate you experience", maxValue=5, defaultValue=3, key="rating_form")
+      with st.container(border=True):
+         dish_recommendation = st.multiselect("Recommend a friend",order)
+      with st.container(border=True):   
+         customer_service = st_star_rating("Please Rate Our Customer Service", maxValue=5, defaultValue=3, key="cs_rating_form")
+      with st.container(border=True):
+         ambience_service = st_star_rating("Please Rate Our Ambience ", maxValue=5, defaultValue=3, key="ambience_rating_form")
+      with st.container(border=True):
+         user_comment = st.text_input("More Feedback?")
+
+      
       submit = st.form_submit_button("Feedback_submit")
       if submit:
-         update_db(dish_recommendation,stars)
+         update_db(dish_recommendation,customer_service, ambience_service, user_comment, order)
+
          st.write("Your feedback has been stored to improve your experience in the future")
 
 
