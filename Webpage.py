@@ -23,9 +23,13 @@ def test_db(dish_recommendation,customer_service, ambience_service, user_comment
          "ambience_service": ambience_service, "user_comments": user_comment, "order": order}, {"table_number": "12", "datetime":str(datetime.now()),"recommendation": dish_recommendation[0], "cs_rating":customer_service, 
          "ambience_service": ambience_service, "user_comments": user_comment, "order": order}]
 
+def update_order(order1,order2, order3):
+   st.session_state.orders.append(order1)
+   st.session_state.orders.append(order2)
+   st.session_state.orders.append(order3)
 
 
-def update_db(dish_recommendation,customer_service, ambience_service, user_comment, order):
+def update_db(dish_recommendation,customer_service, ambience_service, user_comment, order,dish_improvement,user_improvement):
 
       uri = "mongodb+srv://{}:{}@projectlofcluster.kxjkvqf.mongodb.net/?retryWrites=true&w=majority&appName=ProjectLOFCluster".format(st.secrets["db_username"],st.secrets["db_password"] )
       # Create a new client and connect to the server
@@ -37,7 +41,7 @@ def update_db(dish_recommendation,customer_service, ambience_service, user_comme
          db = client["feedback_v0"]
          collection = db["poc_v1"]
          document = {"table_number": "12", "datetime":str(datetime.now()),"recommendation": dish_recommendation, "cs_rating":customer_service, 
-         "ambience_service": ambience_service, "user_comments": user_comment, "order": order}
+         "ambience_service": ambience_service, "user_comments": user_comment, "order": order,"dish_to_improvement":dish_improvement,"improvements": user_improvement}
          inserted_document = collection.insert_one(document)
          client.close()
       except Exception as e:
@@ -65,11 +69,27 @@ with tab_poc_voting :
 
    st.header("Thank you for visiting us and sharing your :blue[Feedback]!!! :sunglasses:")
 
-   order = ["None","Mutton Biryani", "Chicken Vindalo", "Fried Rice"]
+   if not "orders" in st.session_state:
+      st.session_state.orders = ["None"]
 
+
+   if st.toggle("Expert Mode"):
+      with st.form("Orders", clear_on_submit=True):
+         with st.container(border=True):
+            order1= st.text_input("order1")
+         with st.container(border=True):   
+            order2= st.text_input("order2")
+         with st.container(border=True):
+            order3= st.text_input("order3")
+         submit_order = st.form_submit_button("Order_submit")
+         if submit_order:
+            update_order(order1,order2, order3)
+   dish_improvement = st.multiselect("Dish to be Improved?", st.session_state.orders,default="None")
+   if len(dish_improvement) > 0:
+            user_improvement = st.multiselect("What are the improvements?", ["Need more Spice","Need more Salt","Need Less Spice","Need less Salt", "Drop the dish"])
    with st.form("Feedback", clear_on_submit=True):
       with st.container(border=True):
-         dish_recommendation = st.multiselect("Recommend a friend",order)
+         dish_recommendation = st.multiselect("Recommend dish to a friend",st.session_state.orders,default="None",)
       with st.container(border=True):   
          customer_service = st_star_rating("Please Rate Our Customer Service", maxValue=5, defaultValue=3, key="cs_rating_form")
       with st.container(border=True):
@@ -80,7 +100,7 @@ with tab_poc_voting :
       
       submit = st.form_submit_button("Feedback_submit")
       if submit:
-         update_db(dish_recommendation,customer_service, ambience_service, user_comment, order)
+         update_db(dish_recommendation,customer_service, ambience_service, user_comment, st.session_state.orders,dish_improvement,user_improvement)
 
          st.write("Your feedback has been stored to improve your experience in the future")
 
