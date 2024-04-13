@@ -86,9 +86,9 @@ with tab_poc_voting :
             update_order(order1,order2, order3)
    dish_improvement = st.multiselect("Dish to be Improved?", st.session_state.orders,default="None")
    if len(dish_improvement) > 0:
-            user_improvement = st.multiselect("What are the improvements?", ["Need more Spice","Need more Salt","Need Less Spice","Need less Salt", "Drop the dish"])
+            user_improvement = st.selectbox("What are the improvements?", ["Need more Spice","Need more Salt","Need Less Spice","Need less Salt", "Drop the dish"])
    with st.form("Feedback", clear_on_submit=True):
-      with st.container(border=True):
+      with st.container(border=True):  
          dish_recommendation = st.multiselect("Recommend dish to a friend",st.session_state.orders,default="None",)
       with st.container(border=True):   
          customer_service = st_star_rating("Please Rate Our Customer Service", maxValue=5, defaultValue=3, key="cs_rating_form")
