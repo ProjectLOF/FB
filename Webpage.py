@@ -62,7 +62,7 @@ def get_latest_orders():
    client = MongoClient(uri, server_api=ServerApi('1'))
    try:
          client.admin.command('ping')
-         st.write("Pinged your deployment. You successfully connected to MongoDB!")
+         st.write("Successfully connect to the Database")
          db = client["order_db_v0"]
          collection = db["demo_setup_v0"]
          db_response =list(collection.find().sort([('_id', -1)]).limit(1))
