@@ -53,8 +53,6 @@ def get_all_data():
          data = pd.DataFrame(list(collection.find({})))
          st.dataframe(data)    
          client.close()
-         orders = data[0]["order_list"]
-         orders.append("None")
          return orders
    except Exception as e:
       st.write(e)
@@ -67,7 +65,10 @@ def get_latest_orders():
          st.write("Pinged your deployment. You successfully connected to MongoDB!")
          db = client["order_db_v0"]
          collection = db["demo_setup_v0"]
-         return list(collection.find().sort([('_id', -1)]).limit(1))
+         db_response =list(collection.find().sort([('_id', -1)]).limit(1))
+         orders = db_response[0]["order_list"]
+         orders.append("None")
+         return orders
 
    except Exception as e:
       st.write(e)
