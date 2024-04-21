@@ -107,4 +107,3 @@ with st.form("Feedback", clear_on_submit=True):
       update_db(dish_recommendation,customer_service, ambience_service, user_comment, 
                 orders,dish_improvement,user_improvement,repeat_intension)
       st.write("Your feedback has been stored to improve your experience in the future")
-
