@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 st.set_page_config(page_title=None, page_icon=None, layout="wide", initial_sidebar_state="auto", menu_items=None)
 st.set_option('deprecation.showPyplotGlobalUse', False)
-st.title("POC Webpage")
+st.title("No Google!! , No Singups!!, Just Feedbacks!! ")
 
 
 
@@ -43,20 +43,7 @@ def update_db(dish_recommendation,customer_service, ambience_service, user_comme
          st.write(e)
 
 
-def get_all_data():
-   uri = "mongodb+srv://{}:{}@projectlofcluster.kxjkvqf.mongodb.net/?retryWrites=true&w=majority&appName=ProjectLOFCluster".format(st.secrets["db_username"],st.secrets["db_password"] )
-   client = MongoClient(uri, server_api=ServerApi('1'))
-   try:
-         client.admin.command('ping')
-         st.write("Pinged your deployment. You successfully connected to MongoDB!")
-         db = client["feedback_v0"]
-         collection = db["poc_v1"]
-         data = pd.DataFrame(list(collection.find({})))
-         st.dataframe(data)    
-         client.close()
-         return orders
-   except Exception as e:
-      st.write(e)
+
 
 def get_latest_orders():
    uri = "mongodb+srv://{}:{}@projectlofcluster.kxjkvqf.mongodb.net/?retryWrites=true&w=majority&appName=ProjectLOFCluster".format(st.secrets["db_username"],st.secrets["db_password"] )
