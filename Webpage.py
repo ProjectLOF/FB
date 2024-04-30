@@ -54,7 +54,7 @@ def get_latest_orders():
          collection = db["demo_setup_v0"]
          db_response =list(collection.find().sort([('_id', -1)]).limit(1))
          orders = db_response[0]["order_list"]
-         orders.append("None")
+         #orders.append("None")
          return orders
 
    except Exception as e:
@@ -78,14 +78,28 @@ st.header("Thank you for visiting us and sharing your :blue[Feedback]!!! :sungla
 
 orders = get_latest_orders()
         
+               
 with st.container(border=True):    
-   dish_improvement = st.multiselect("Dish to be Improved?", orders,default="None")
-   user_improvement = "NA"
-   if len(dish_improvement) > 0 and "None" not in dish_improvement :
-            user_improvement = st.selectbox("What are the improvements?", ["Need more Spice","Need more Salt","Need Less Spice","Need less Salt", "Drop the dish"])
-with st.form("Feedback", clear_on_submit=True): 
+   st.info("Will You recommend us?")
+   col_rec1, col_rec2, col_rec3 = st.columns(3)
    repeat_intension = st.selectbox("Will you visit us again?", ["Yes", "Undecided", "Never"])
-   dish_recommendation = st.multiselect("Recommend dish to a friend",orders,default="None",)
+   if st.toggle("Recommend a dish"):
+      dish_recommendation = st.multiselect("Recommend dish to a friend",orders,max_selections= 1)
+
+
+
+with st.container(border=True):    
+   st.info("What would you like us to change?")
+   user_improvement = "NA"
+   if st.toggle("Suggest Improvements"):
+      dish_improvement = st.multiselect("Dishes to be Improved?", orders)
+      if len(dish_improvement) > 0 and "None" not in dish_improvement :
+               user_improvement = st.selectbox("What are the improvements?", 
+                                               ["Need more Spice","Need more Salt","Need Less Spice",
+                                                "Need less Salt", "Served Quantity was low", "Served Quantity was too much","Drop the dish"])
+
+
+with st.form("Feedback", clear_on_submit=True): 
    customer_service = st_star_rating("Please Rate Our Customer Service", maxValue=5, defaultValue=3, key="cs_rating_form")
    ambience_service = st_star_rating("Please Rate Our Ambience ", maxValue=5, defaultValue=3, key="ambience_rating_form")
    user_comment = st.text_input("More Feedback?")
