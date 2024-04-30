@@ -81,6 +81,7 @@ orders = get_latest_orders()
                
 with st.container(border=True):    
    st.info("Will You recommend us?")
+   dish_recommendation = "None"
    col_rec1, col_rec2, col_rec3 = st.columns(3)
    repeat_intension = st.selectbox("Will you visit us again?", ["Yes", "Undecided", "Never"])
    if st.toggle("Recommend a dish"):
@@ -88,7 +89,8 @@ with st.container(border=True):
 
 
 
-with st.container(border=True):    
+with st.container(border=True):  
+   dish_improvement = "None"  
    st.info("What would you like us to change?")
    user_improvement = "NA"
    if st.toggle("Suggest Improvements"):
