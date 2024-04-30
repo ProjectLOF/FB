@@ -85,7 +85,7 @@ with st.container(border=True):
    col_rec1, col_rec2, col_rec3 = st.columns(3)
    repeat_intension = st.selectbox("Will you visit us again?", ["Yes", "Undecided", "Never"])
    if st.toggle("Recommend a dish"):
-      dish_recommendation = st.multiselect("Recommend dish to a friend",orders,max_selections= 1)
+      dish_recommendation = st.multiselect("Recommend dish to a friend",orders,max_selections= 2)
 
 
 
